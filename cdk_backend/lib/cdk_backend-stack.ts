@@ -37,7 +37,7 @@ export class CdkBackendStack extends cdk.Stack {
     // --------- Create Amplify App (WITHOUT referencing the domain yet) ----------
     const amplifyApp = new amplify.App(this, 'pdfui', {
       sourceCodeProvider: new amplify.GitHubSourceCodeProvider({
-        owner: 'satech-uic',
+        owner: 'ASUCICREPO',
         repository: 'PDF_accessability_UI',
         oauthToken: githubToken_secret_manager.secretValue
       }),
@@ -63,12 +63,15 @@ export class CdkBackendStack extends cdk.Stack {
       }),
     });
 
-    // Custom redirect rule to handle client-side routing
-    amplifyApp.addCustomRule({
-      source: "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>",
-      target: '/index.html',
-      status: amplify.RedirectStatus.REWRITE
-    });
+    // VERY VERY IMPORANT THIS RULE IS STILL IMPORANT BUT PLEASE KEEP IN MIND THIS RULE NEEDS TO BE ADDED 
+    // AFTER THE APPLICATION IS DONE BUILDING AND NEEDS TO BE DELETED BEFORE DEPLOYING A NEW UPDATE 
+    // AND THEN NEEDS TO BE RE ADDED
+
+    // amplifyApp.addCustomRule({
+    //   source: '/<*>',
+    //   target: '/index.html',
+    //   status: amplify.RedirectStatus.REWRITE
+    // });
 
 
     // Create main branch
@@ -77,7 +80,7 @@ export class CdkBackendStack extends cdk.Stack {
       stage: 'PRODUCTION'
     });
 
-    const domainPrefix = 'pdf-ui-auth-UIC'; // must be globally unique in that region
+    const domainPrefix = 'pdf-ui-auth'; // must be globally unique in that region
     const Default_Group = 'DefaultUsers';
     const Amazon_Group = 'AmazonUsers';
     const Admin_Group = 'AdminUsers';
