@@ -90,7 +90,15 @@ The script will guide you through:
    - Backend deployment: ~3-5 minutes
    - Frontend deployment: ~5-10 minutes
 
-### Step 4: Access Your Application
+### Step 4: Update Lambda with Cognito User Pool ID
+
+1. Copy the User Pool ID from the Cognito section
+2. Navigate to the Lambda section in the AWS Console
+3. Find the `CdkBackendStack-UpdateAttributesGroupsFn` function
+4. Paste the User Pool ID into the `USER_POOL_ID` variable under the Hardcoded Configuration section
+5. Redeploy the function
+
+### Step 5: Access Your Application
 
 After successful deployment, the script will display:
 
