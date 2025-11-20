@@ -16,6 +16,10 @@ export class CdkBackendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     
+    // Add cost tag to all resources in this stack
+    cdk.Tags.of(this).add('project', 'PDFRemediation');
+    cdk.Tags.of(this).add('component', 'PDF_frontend');
+
     const PDF_TO_PDF_BUCKET = this.node.tryGetContext('PDF_TO_PDF_BUCKET') || "Null";
     const PDF_TO_HTML_BUCKET = this.node.tryGetContext('PDF_TO_HTML_BUCKET') || "Null";
 
