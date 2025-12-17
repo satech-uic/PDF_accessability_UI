@@ -35,6 +35,13 @@ def handler(event, context):
             'custom:max_files_allowed': '500',
             'custom:max_pages_allowed': '1500',
             'custom:max_size_allowed_MB': '1000'
+        },
+        'UnauthorizedUsers': {
+            'custom:first_sign_in': 'true',
+            'custom:total_files_uploaded': '0',
+            'custom:max_files_allowed': '0',
+            'custom:max_pages_allowed': '0',
+            'custom:max_size_allowed_MB': '0'
         }
     }
 
@@ -56,13 +63,20 @@ def handler(event, context):
         # elif user_email.endswith('@admin.com'):
         #     assigned_group = ADMIN_GROUP
 
-        # Add user to the assigned group
-        cognito_idp.admin_add_user_to_group(
-            UserPoolId=user_pool_id,
-            Username=username,
-            GroupName=assigned_group
-        )
-        print(f'User {username} added to group {assigned_group}.')
+        
+        allowed_users_emails = []   # Put allowed user emails here
+
+        if user_email not in allowed_users_emails:
+            assigned_group = 'UnauthorizedUsers'
+            print(f'User {username} is not in the allowed list. Assigning UnauthorizedUsers group attributes.')
+        else:
+            # Add user to the assigned group
+            cognito_idp.admin_add_user_to_group(
+                UserPoolId=user_pool_id,
+                Username=username,
+                GroupName=assigned_group
+            )
+            print(f'User {username} added to group {assigned_group}.')
 
         # Initialize custom attributes based on the assigned group
         attributes = group_attributes.get(assigned_group, {})

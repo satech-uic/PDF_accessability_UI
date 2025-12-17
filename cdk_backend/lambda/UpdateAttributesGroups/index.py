@@ -37,11 +37,18 @@ GROUP_LIMITS = {
         'custom:max_files_allowed': '500',
         'custom:max_pages_allowed': '1500',
         'custom:max_size_allowed_MB': '1000'
+    },
+    'UnauthorizedUsers': {
+        # 'custom:first_sign_in': 'true',
+        # 'custom:total_files_uploaded': '0',  # optionally reset
+        'custom:max_files_allowed': '0',
+        'custom:max_pages_allowed': '0',
+        'custom:max_size_allowed_MB': '0'
     }
 }
 
 # Define a precedence: The first match in this list is considered "highest" precedence.
-GROUP_PRECEDENCE = ['AdminUsers', 'AmazonUsers', 'DefaultUsers']
+GROUP_PRECEDENCE = ['AdminUsers', 'AmazonUsers', 'DefaultUsers', 'UnauthorizedUsers']
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 # Do not change below for normal usage
@@ -180,6 +187,12 @@ def handle_eventbridge_invocation(event):
 
     # 3) Determine which group has the highest precedence
     highest_group = get_highest_precedence_group(user_groups)
+
+    user_email = next((a['Value'] for a in user.get('UserAttributes', []) if a.get('Name') == 'email'), None)
+
+    allowed_users_emails = []   # Put allowed user emails here
+    if user_email not in allowed_users_emails:
+        highest_group = 'UnauthorizedUsers'
 
     # 4) Fetch the attribute set for that group. If none matched, fallback to 'DEFAULT_GROUP'
     attributes_to_apply = GROUP_LIMITS.get(highest_group, GROUP_LIMITS['DefaultUsers'])

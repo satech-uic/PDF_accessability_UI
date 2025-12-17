@@ -98,7 +98,12 @@ The script will guide you through:
 4. Paste the User Pool ID into the `USER_POOL_ID` variable under the Hardcoded Configuration section
 5. Redeploy the function
 
-### Step 5: Access Your Application
+### Step 5: Add Allowed Users
+
+1. In the Lambda functions `postConfirmation/index.py` and `updateAttributesGroups/index.py`, add the email addresses of users who should have access to the application in the `allowed_users_emails` list.
+2. Other email addresses will receive zero upload quotas and will not be able to remediate PDFs.
+
+### Step 6: Access Your Application
 
 After successful deployment, the script will display:
 
